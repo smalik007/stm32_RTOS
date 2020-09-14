@@ -1,2 +1,6 @@
 .settings
+.cproject
+.project
 Debug
+LinkerScript.ld
+NUCLEO-F446RE.xml
