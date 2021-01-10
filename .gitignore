@@ -1,5 +1,8 @@
 Debug
 Release
 .settings
+.vscode/
+stm32_RTOS Debug.cfg
+stm32_RTOS Run.cfg
 LinkerScript.ld
 NUCLEO-F446RE.xml
