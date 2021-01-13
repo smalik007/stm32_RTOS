@@ -14,6 +14,12 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+/* Defines */
+#define TRUE 1
+#define FALSE 0
+#define AVAILABLE TRUE
+#define NOT_AVAILABLE FALSE
+
 /* Task handler to use to blocking, deleting, yeilding etc */
 TaskHandle_t xTaskHandle1;
 TaskHandle_t xTaskHandle2;
@@ -21,6 +27,15 @@ TaskHandle_t xTaskHandle2;
 /* Task prototype */
 void vTask1_handler(void* param);
 void vTask2_handler(void* param);
+
+#define USE_SEMIHOSTING
+
+#ifdef USE_SEMIHOSTING
+extern void initialise_monitor_handles();
+#endif
+
+/* Global variables */
+uint8_t uart_accesskey = AVAILABLE;
 
 // void LOG_MSG(char* msg);
 
@@ -31,6 +46,12 @@ int main(void) {
 
   /* Update the systemCoreClock variables */
   SystemCoreClockUpdate();
+
+#ifdef USE_SEMIHOSTING
+  /* Configration to enable semihosting for print  */
+  initialise_monitor_handles();
+  printf("Hello World\n");
+#endif
 
   /* Create two task as follows, there setting the stack size to MINIMAL_SIZE = word * size of word in bytes */
   xTaskCreate(vTask1_handler, "Task-1", configMINIMAL_STACK_SIZE, NULL, 2, &xTaskHandle1);
@@ -47,6 +68,10 @@ int main(void) {
 
 void vTask1_handler(void* param) {
   while (1) {
+#ifdef USE_SEMIHOSTING
+    printf("Hello From Task - 1\n");
+#endif
+
     // if (uart_accesskey == AVAILABLE) {
     //   uart_accesskey = NOT_AVAILABLE;
     //   LOG_MSG("Hello From Task-1\n");
@@ -60,6 +85,9 @@ void vTask1_handler(void* param) {
 
 void vTask2_handler(void* param) {
   while (1) {
+#ifdef USE_SEMIHOSTING
+    printf("Hello From Task - 1\n");
+#endif
     // if (uart_accesskey == AVAILABLE) {
     //   uart_accesskey = NOT_AVAILABLE;
     //   LOG_MSG("Hello From Task-2\n");
