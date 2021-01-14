@@ -30,9 +30,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32h7xx_nucleo_conf.h"
 #include "stm32h7xx_nucleo_errno.h"
+#include <stdio.h>
 
 #if (USE_BSP_COM_FEATURE > 0)
   #if (USE_COM_LOG > 0)
+    extern int __io_putchar(int ch);
     #ifndef __GNUC__
       #include <stdio.h>
     #endif
@@ -248,18 +250,18 @@ typedef struct
 #define COM1_CLK_ENABLE()             __HAL_RCC_USART3_CLK_ENABLE()
 #define COM1_CLK_DISABLE()            __HAL_RCC_USART3_CLK_DISABLE()
 
-#define COM1_TX_PIN                   GPIO_PIN_8
-#define COM1_TX_GPIO_PORT             GPIOD
-#define COM1_TX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOD_CLK_ENABLE()
-#define COM1_TX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOD_CLK_DISABLE()
-#define COM1_TX_AF                    GPIO_AF7_USART3
+#define COM1_TX_PIN                   GPIO_PIN_8 //8
+#define COM1_TX_GPIO_PORT             GPIOD // D
+#define COM1_TX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOD_CLK_ENABLE()  //D
+#define COM1_TX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOD_CLK_DISABLE()  //D
+#define COM1_TX_AF                    GPIO_AF7_USART3  
 
-#define COM1_RX_PIN                   GPIO_PIN_9
-#define COM1_RX_GPIO_PORT             GPIOD
-#define COM1_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOD_CLK_ENABLE()
-#define COM1_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOD_CLK_DISABLE()
+#define COM1_RX_PIN                   GPIO_PIN_9  //9
+#define COM1_RX_GPIO_PORT             GPIOD  //D
+#define COM1_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOD_CLK_ENABLE() //D
+#define COM1_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOD_CLK_DISABLE()  //D
 #define COM1_RX_AF                    GPIO_AF7_USART3
-#define COM_POLL_TIMEOUT             1000
+#define COM_POLL_TIMEOUT             0xFFFF
 #endif
 
 /**

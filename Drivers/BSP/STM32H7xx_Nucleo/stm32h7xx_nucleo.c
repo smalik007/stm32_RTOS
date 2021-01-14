@@ -589,12 +589,12 @@ int32_t BSP_COM_SelectLogPort(COM_TypeDef COM)
   * @brief  Redirect console output to COM
   */
  #ifdef __GNUC__
- int __io_putchar (int ch)
+ int __io_putchar(int ch)
  #else
  int fputc (int ch, FILE *f)
  #endif /* __GNUC__ */
 {
-  HAL_UART_Transmit (&hcom_uart [COM_ActiveLogPort], (uint8_t *) &ch, 1, COM_POLL_TIMEOUT);
+  HAL_UART_Transmit(&hcom_uart[COM_ActiveLogPort], (uint8_t *) &ch, 1, COM_POLL_TIMEOUT);
   return ch;
 }
 #endif /* USE_COM_LOG */
