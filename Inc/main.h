@@ -22,14 +22,18 @@
 #define __MAIN_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32h7xx_hal.h"
-// #include "stm32h7xx_hal_usart.h"
-#include "stm32h7xx_nucleo.h"
+#include "boardSetup.h"
+#include "global.h"
+#include "my_task.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
+
 /* Exported functions ------------------------------------------------------- */
+#ifdef USE_SEMIHOSTING
+extern void initialise_monitor_handles();
+#endif
 
 #endif /* __MAIN_H */
 
