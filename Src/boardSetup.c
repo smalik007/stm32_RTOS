@@ -6,6 +6,7 @@
  */
 
 #include "boardSetup.h"
+#include <string.h>
 
 /* To setup the peripheral related configuration  */
 void setupBoard() {
@@ -78,7 +79,7 @@ void LOG_MSG(char* msg) {
  * @param  None
  * @retval None
  */
-static void SystemClock_Config(void) {
+void SystemClock_Config(void) {
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_OscInitTypeDef RCC_OscInitStruct;
   HAL_StatusTypeDef ret = HAL_OK;
@@ -137,7 +138,7 @@ static void SystemClock_Config(void) {
  * @param  None
  * @retval None
  */
-static void Error_Handler(void) {
+void Error_Handler(void) {
   // /* Turn LED3 on */
   // BSP_LED_On(LED3);
 
@@ -151,7 +152,7 @@ static void Error_Handler(void) {
  * @param  None
  * @retval None
  */
-static void CPU_CACHE_Enable(void) {
+void CPU_CACHE_Enable(void) {
   /* Enable I-Cache */
   SCB_EnableICache();
 

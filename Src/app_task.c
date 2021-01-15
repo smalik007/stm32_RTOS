@@ -1,13 +1,11 @@
 /*
- * task.c
+ *  app_task.c
  *
  *  Created on: 16-Jan-2021
  *      Author: suhail
  */
 
-#include "my_task.h"
-
-#include "boardSetup.h"
+#include "app_task.h"
 
 void vTask1_handler(void* param) {
   while (1) {

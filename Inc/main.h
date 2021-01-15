@@ -22,9 +22,9 @@
 #define __MAIN_H
 
 /* Includes ------------------------------------------------------------------*/
+#include "app_task.h"
 #include "boardSetup.h"
 #include "global.h"
-#include "my_task.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
