@@ -261,7 +261,7 @@ typedef struct
 #define COM1_RX_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOD_CLK_ENABLE() //D
 #define COM1_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOD_CLK_DISABLE()  //D
 #define COM1_RX_AF                    GPIO_AF7_USART3
-#define COM_POLL_TIMEOUT             0xFFFF
+#define COM_POLL_TIMEOUT             100
 #endif
 
 /**
