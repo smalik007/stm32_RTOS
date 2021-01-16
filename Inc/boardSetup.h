@@ -16,3 +16,7 @@ static void CPU_CACHE_Enable(void);
 
 void setupUSART3();
 void setupBoard();
+void setupLeds();
+void LedOn(Led_TypeDef led);
+void LedOff(Led_TypeDef led);
+void LedToggle(Led_TypeDef led);

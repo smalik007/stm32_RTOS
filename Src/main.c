@@ -17,6 +17,9 @@ int main(void) {
 #endif
 
   LOG_MSG("Hello main");
+  LedOn(LED_GREEN);
+//  LedOn(LED_YELLOW);
+//  LedOn(LED_RED);
 
   /* Create two task as follows, there setting the stack size to MINIMAL_SIZE = word * size of word in bytes */
   xTaskCreate(vTask1_handler, "Task-1", configMINIMAL_STACK_SIZE, NULL, 2, &xTaskHandle1);

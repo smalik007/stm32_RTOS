@@ -6,6 +6,7 @@
  */
 
 #include "boardSetup.h"
+
 #include <string.h>
 
 /* To setup the peripheral related configuration  */
@@ -27,6 +28,7 @@ void setupBoard() {
   /* Configure the system clock to 400 MHz */
   SystemClock_Config();
   setupUSART3();
+  setupLeds();
 }
 
 void setupUSART3() {
@@ -47,6 +49,16 @@ void setupUSART3() {
   // LOG_MSG(millis);
   // LOG_MSG("USART3 configured\n");
 }
+
+void setupLeds() {
+  BSP_LED_Init(LED_GREEN);
+  BSP_LED_Init(LED_YELLOW);
+  BSP_LED_Init(LED_RED);
+}
+
+void LedOn(Led_TypeDef led) { BSP_LED_On(led); }
+void LedOff(Led_TypeDef led) { BSP_LED_Off(led); }
+void LedToggle(Led_TypeDef led) { BSP_LED_Toggle(led); }
 
 void LOG_MSG(char* msg) {
   int DataIdx;
@@ -139,12 +151,12 @@ void SystemClock_Config(void) {
  * @retval None
  */
 void Error_Handler(void) {
-  // /* Turn LED3 on */
-  // BSP_LED_On(LED3);
 
-  // while(1)
-  // {
-  // }
+   LedOn(LED_RED);
+
+   while(1)
+   {
+   }
 }
 
 /**
