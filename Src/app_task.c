@@ -7,6 +7,8 @@
 
 #include "app_task.h"
 
+uint8_t uart_accesskey = AVAILABLE;
+
 void vTask1_handler(void* param) {
   while (1) {
 #ifdef USE_SEMIHOSTING

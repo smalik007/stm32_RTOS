@@ -8,11 +8,12 @@
 
 #include "stm32h7xx_hal.h"
 #include "stm32h7xx_nucleo.h"
+#include "global_var.h"
 
 /* Private function prototypes -----------------------------------------------*/
-static void SystemClock_Config(void);
-static void Error_Handler(void);
-static void CPU_CACHE_Enable(void);
+void SystemClock_Config(void);
+void Error_Handler(void);
+void CPU_CACHE_Enable(void);
 
 void setupUSART3();
 void setupBoard();

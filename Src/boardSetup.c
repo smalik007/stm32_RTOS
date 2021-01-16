@@ -9,10 +9,13 @@
 
 #include <string.h>
 
+uint32_t milliseconds = 0;
+
 /* To setup the peripheral related configuration  */
 void setupBoard() {
   /* Enable the CPU Cache */
   CPU_CACHE_Enable();
+  DWT->CTRL |= (1 << 0);
 
   /* STM32H7xx HAL library initialization:
       - Systick timer is configured by default as source of time base, but user
@@ -24,9 +27,11 @@ void setupBoard() {
       - Low Level Initialization
     */
   HAL_Init();
+//  HAL_InitTick();
 
   /* Configure the system clock to 400 MHz */
   SystemClock_Config();
+
   setupUSART3();
   setupLeds();
 }
@@ -171,3 +176,19 @@ void CPU_CACHE_Enable(void) {
   /* Enable D-Cache */
   SCB_EnableDCache();
 }
+
+/**
+  * @brief This function is called to increment  a global variable "uwTick"
+  *        used as application time base.
+  * @note In the default implementation, this variable is incremented each 1ms
+  *       in Systick ISR.
+ * @note This function is declared as __weak to be overwritten in case of other
+  *      implementations in user file.
+  * @retval None
+  */
+// void HAL_IncTick(void)
+// {
+//   uwTick += (uint32_t)uwTickFreq;
+//   milliseconds = uwTick;
+// }
+

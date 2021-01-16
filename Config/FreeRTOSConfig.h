@@ -94,6 +94,8 @@ to exclude the API function. */
 #define INCLUDE_xQueueGetMutexHolder            1
 #define INCLUDE_xTaskGetSchedulerState          1
 #define INCLUDE_eTaskGetState                   1
+#define INCLUDE_xTaskGetIdleTaskHandle			1
+#define INCLUDE_pxTaskGetStackStart				1
 
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS
@@ -133,6 +135,8 @@ header file. */
 /* Override the default implementation of sbSEND_COMPLETED so the macro creates
 an interrupt in the M4 core.  See the comments at the top of main.c. */
 #define sbSEND_COMPLETED( pxStreamBuffer ) vGenerateM7ToM4Interrupt( pxStreamBuffer )
+
+#include "SEGGER_SYSVIEW_FreeRTOS.h"
 
 #endif /* FREERTOS_CONFIG_H */
 

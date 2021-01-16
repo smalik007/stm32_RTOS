@@ -15,4 +15,7 @@
 #define AVAILABLE TRUE
 #define NOT_AVAILABLE FALSE
 
+/* Global Variable ------------------------------------------------------------*/
+extern uint32_t milliseconds;
+
 extern void LOG_MSG(char* msg);

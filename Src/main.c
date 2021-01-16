@@ -21,6 +21,10 @@ int main(void) {
 //  LedOn(LED_YELLOW);
 //  LedOn(LED_RED);
 
+  /* Start Recording Segger */
+  SEGGER_SYSVIEW_Conf();
+  SEGGER_SYSVIEW_Start();
+
   /* Create two task as follows, there setting the stack size to MINIMAL_SIZE = word * size of word in bytes */
   xTaskCreate(vTask1_handler, "Task-1", configMINIMAL_STACK_SIZE, NULL, 2, &xTaskHandle1);
   xTaskCreate(vTask2_handler, "Task-2", configMINIMAL_STACK_SIZE, NULL, 2, &xTaskHandle2);

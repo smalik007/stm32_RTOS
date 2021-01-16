@@ -24,7 +24,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "app_task.h"
 #include "boardSetup.h"
-#include "global.h"
+#include "global_var.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/

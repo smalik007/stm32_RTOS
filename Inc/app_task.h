@@ -8,7 +8,7 @@
 #pragma once
 
 #include "FreeRTOS.h"
-#include "global.h"
+#include "global_var.h"
 #include "task.h"
 /* Exported macro ------------------------------------------------------------*/
 
@@ -20,7 +20,6 @@ TaskHandle_t xTaskHandle2;
 /* Exported constants --------------------------------------------------------*/
 
 /* Global variables ----------------------------------------------------------*/
-static uint8_t uart_accesskey = AVAILABLE;
 
 /* Exported functions ------------------------------------------------------- */
 /* Task prototype ----------------------------------------------------------- */
