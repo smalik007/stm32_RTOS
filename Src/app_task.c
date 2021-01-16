@@ -12,16 +12,14 @@ void vTask1_handler(void* param) {
 #ifdef USE_SEMIHOSTING
     printf("Hello From Task - 1\n");
 #endif
-    // printf("Hello from task -1\n");
-    LOG_MSG("Hello msg from Task-1\n");
-    // if (uart_accesskey == AVAILABLE) {
-    //   uart_accesskey = NOT_AVAILABLE;
-    //   LOG_MSG("Hello From Task-1\n");
-    //   uart_accesskey = AVAILABLE;
+    if (uart_accesskey == AVAILABLE) {
+      uart_accesskey = NOT_AVAILABLE;
+      LOG_MSG("Hello From Task-1\n");
+      uart_accesskey = AVAILABLE;
 
-    //   /* Manually trigger context swithing, leaving the CPU and allowing other task to use the uart_accesskey*/
-    //   taskYIELD();
-    // }
+      /* Manually trigger context swithing, leaving the CPU and allowing other task to use the uart_accesskey*/
+      taskYIELD();
+    }
   }
 }
 
@@ -30,11 +28,11 @@ void vTask2_handler(void* param) {
 #ifdef USE_SEMIHOSTING
     printf("Hello From Task - 1\n");
 #endif
-    // if (uart_accesskey == AVAILABLE) {
-    //   uart_accesskey = NOT_AVAILABLE;
-    LOG_MSG("Hello From Task-2\n");
-    //   uart_accesskey = AVAILABLE;
-    //   taskYIELD();
-    // }
+    if (uart_accesskey == AVAILABLE) {
+      uart_accesskey = NOT_AVAILABLE;
+      LOG_MSG("Hello From Task-2\n");
+      uart_accesskey = AVAILABLE;
+      taskYIELD();
+    }
   }
 }
