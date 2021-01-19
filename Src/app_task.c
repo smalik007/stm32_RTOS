@@ -19,6 +19,12 @@ void vTask1_handler(void* param) {
       LOG_MSG("Hello From Task-1\n");
       uart_accesskey = AVAILABLE;
 
+      /* Prints for segger SYSview */
+      SEGGER_SYSVIEW_Print("task1 - yielding");
+
+      /* tells Segger that we are manually switching the context in case of co-operative scheduling */
+      traceISR_EXIT_TO_SCHEDULER();
+
       /* Manually trigger context swithing, leaving the CPU and allowing other task to use the uart_accesskey*/
       taskYIELD();
     }
@@ -34,6 +40,11 @@ void vTask2_handler(void* param) {
       uart_accesskey = NOT_AVAILABLE;
       LOG_MSG("Hello From Task-2\n");
       uart_accesskey = AVAILABLE;
+
+      SEGGER_SYSVIEW_Print("task2 - yielding");
+
+      traceISR_EXIT_TO_SCHEDULER();
+
       taskYIELD();
     }
   }
