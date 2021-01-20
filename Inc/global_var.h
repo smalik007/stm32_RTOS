@@ -14,8 +14,9 @@
 #define FALSE 0
 #define AVAILABLE TRUE
 #define NOT_AVAILABLE FALSE
+#define USE_SEGGER_SYSVIEW FALSE
 
 /* Global Variable ------------------------------------------------------------*/
-extern uint32_t milliseconds;
+//extern uint32_t milliseconds;
 
 extern void LOG_MSG(char* msg);

@@ -11,11 +11,20 @@
 
 uint32_t milliseconds = 0;
 
+/* Prototypes */
+static void setupUSART3();
+static void setupLeds();
+static void setupButtons();
+
 /* To setup the peripheral related configuration  */
 void setupBoard() {
   /* Enable the CPU Cache */
   CPU_CACHE_Enable();
+
+  /* Required when using segger system */
+#if USE_SEGGER_SYSVIEW == TRUE
   DWT->CTRL |= (1 << 0);
+#endif
 
   /* STM32H7xx HAL library initialization:
       - Systick timer is configured by default as source of time base, but user
@@ -27,13 +36,14 @@ void setupBoard() {
       - Low Level Initialization
     */
   HAL_Init();
-//  HAL_InitTick();
+  //  HAL_InitTick();
 
   /* Configure the system clock to 400 MHz */
   SystemClock_Config();
 
   setupUSART3();
   setupLeds();
+  setupButtons();
 }
 
 void setupUSART3() {
@@ -64,6 +74,8 @@ void setupLeds() {
 void LedOn(Led_TypeDef led) { BSP_LED_On(led); }
 void LedOff(Led_TypeDef led) { BSP_LED_Off(led); }
 void LedToggle(Led_TypeDef led) { BSP_LED_Toggle(led); }
+
+void setupButtons() { BSP_PB_Init(BUTTON_USER, BUTTON_MODE_GPIO); }
 
 void LOG_MSG(char* msg) {
   int DataIdx;
@@ -156,12 +168,10 @@ void SystemClock_Config(void) {
  * @retval None
  */
 void Error_Handler(void) {
+  LedOn(LED_RED);
 
-   LedOn(LED_RED);
-
-   while(1)
-   {
-   }
+  while (1) {
+  }
 }
 
 /**
@@ -178,17 +188,16 @@ void CPU_CACHE_Enable(void) {
 }
 
 /**
-  * @brief This function is called to increment  a global variable "uwTick"
-  *        used as application time base.
-  * @note In the default implementation, this variable is incremented each 1ms
-  *       in Systick ISR.
+ * @brief This function is called to increment  a global variable "uwTick"
+ *        used as application time base.
+ * @note In the default implementation, this variable is incremented each 1ms
+ *       in Systick ISR.
  * @note This function is declared as __weak to be overwritten in case of other
-  *      implementations in user file.
-  * @retval None
-  */
+ *      implementations in user file.
+ * @retval None
+ */
 // void HAL_IncTick(void)
 // {
 //   uwTick += (uint32_t)uwTickFreq;
 //   milliseconds = uwTick;
 // }
-
