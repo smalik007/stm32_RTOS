@@ -57,29 +57,31 @@ void vTask_handler_Led(void* param) {
   while (1) {
     if (button_count == 0) {
       LedToggle(LED_RED);
-      vTaskDelay(200/portTICK_PERIOD_MS);
+      vTaskDelay(200 / portTICK_PERIOD_MS);
       LedToggle(LED_RED);
-      vTaskDelay(200/portTICK_PERIOD_MS);
+      vTaskDelay(200 / portTICK_PERIOD_MS);
     } else if (button_count == 1) {
       LedToggle(LED_YELLOW);
-      vTaskDelay(500/portTICK_PERIOD_MS);
+      vTaskDelay(500 / portTICK_PERIOD_MS);
       LedToggle(LED_YELLOW);
-      vTaskDelay(500/portTICK_PERIOD_MS);
+      vTaskDelay(500 / portTICK_PERIOD_MS);
     } else if (button_count == 2) {
       LedToggle(LED_GREEN);
-      vTaskDelay(1000/portTICK_PERIOD_MS);
+      vTaskDelay(1000 / portTICK_PERIOD_MS);
       LedToggle(LED_GREEN);
-      vTaskDelay(1000/portTICK_PERIOD_MS);
+      vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
   }
 }
 
-void vTask_handler_Button(void* param) {
-  while (1) {
-    button_status = BSP_PB_GetState(BUTTON_USER);
-    if (button_status == BUTTON_PRESSED) {
-      button_count = (button_count + 1) % 3;
-    }
-    taskYIELD();
-  }
-}
+// void vTask_handler_Button(void* param) {
+//   while (1) {
+//     button_status = BSP_PB_GetState(BUTTON_USER);
+//     if (button_status == BUTTON_PRESSED) {
+//       button_count = (button_count + 1) % 3;
+//     }
+//     taskYIELD();
+//   }
+// }
+
+void button_handler() { button_count = (button_count + 1) % 3; }

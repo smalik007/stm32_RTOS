@@ -58,11 +58,6 @@ void setupUSART3() {
 
   BSP_COM_Init(COM1, bsp_com1);
   BSP_COM_SelectLogPort(COM1);
-  // HAL_Delay(1000); // Let initialize
-  //  for(long a = 0; a < INT16_MAX; a++); // delay
-  // uint32_t millis = HAL_GetTick();
-  // LOG_MSG(millis);
-  // LOG_MSG("USART3 configured\n");
 }
 
 void setupLeds() {
@@ -75,7 +70,14 @@ void LedOn(Led_TypeDef led) { BSP_LED_On(led); }
 void LedOff(Led_TypeDef led) { BSP_LED_Off(led); }
 void LedToggle(Led_TypeDef led) { BSP_LED_Toggle(led); }
 
-void setupButtons() { BSP_PB_Init(BUTTON_USER, BUTTON_MODE_GPIO); }
+void setupButtons() {
+  /* GPIO MODE */
+  // BSP_PB_Init(BUTTON_USER, BUTTON_MODE_GPIO);
+
+  /* EXTI interrupt mode */
+  BSP_PB_Init(BUTTON_USER, BUTTON_MODE_EXTI);
+  // BSP_PB_IRQHandler(BUTTON_USER);
+}
 
 void LOG_MSG(char* msg) {
   int DataIdx;
@@ -83,6 +85,23 @@ void LOG_MSG(char* msg) {
 
   for (DataIdx = 0; DataIdx < len; DataIdx++) {
     __io_putchar(msg[DataIdx]);
+  }
+}
+
+/**
+ * @brief  This function handles EXTI0_IRQ Handler.
+ * @param  None
+ * @retval None
+ */
+void EXTI15_10_IRQHandler(void) {
+  /* Following function clears IT pending bits and in returns call the below BSP_PB_Callback*/
+  BSP_PB_IRQHandler(BUTTON_USER);
+}
+
+/* Interrupt callback function for user button */
+void BSP_PB_Callback(Button_TypeDef Button) {
+  if (Button == BUTTON_USER) {
+    button_handler();
   }
 }
 
