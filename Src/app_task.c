@@ -7,6 +7,8 @@
 
 #include "app_task.h"
 
+#include <stdio.h>
+
 uint8_t uart_accesskey = AVAILABLE;
 uint8_t button_status = BUTTON_RELEASED;
 uint8_t button_count = 0;
@@ -83,5 +85,31 @@ void vTask_handler_Led(void* param) {
 //     taskYIELD();
 //   }
 // }
+
+void vTask_Led_notify_handler(void* param) {
+  char* usr_msg = (char*)malloc(200);
+  uint32_t notify_counter = 0;
+  while (1) {
+    if (pdTRUE == xTaskNotifyWait(0, 0, &notify_counter, portMAX_DELAY)) {
+      /* Received the notification */
+      sprintf(usr_msg, "Rx Notification : %ld\r\n", notify_counter);
+      LOG_MSG(usr_msg);
+      LedToggle(LED_GREEN);
+    }
+  }
+  free(usr_msg);
+}
+void vTask_Button_notify_handler(void* param) {
+  char* usr_msg = (char*)malloc(200);
+  while (1) {
+    if (BSP_PB_GetState(BUTTON_USER) == BUTTON_PRESSED) {
+      vTaskDelay(200);
+      sprintf(usr_msg, "Tx Notification \r\n");
+      LOG_MSG(usr_msg);
+      xTaskNotifyAndQuery(xTaskHandleLedNotify, 0, eIncrement, 0);
+    }
+  }
+  free(usr_msg);
+}
 
 void button_handler() { button_count = (button_count + 1) % 3; }

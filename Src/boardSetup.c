@@ -72,11 +72,10 @@ void LedToggle(Led_TypeDef led) { BSP_LED_Toggle(led); }
 
 void setupButtons() {
   /* GPIO MODE */
-  // BSP_PB_Init(BUTTON_USER, BUTTON_MODE_GPIO);
+   BSP_PB_Init(BUTTON_USER, BUTTON_MODE_GPIO);
 
   /* EXTI interrupt mode */
-  BSP_PB_Init(BUTTON_USER, BUTTON_MODE_EXTI);
-  // BSP_PB_IRQHandler(BUTTON_USER);
+//  BSP_PB_Init(BUTTON_USER, BUTTON_MODE_EXTI);
 }
 
 void LOG_MSG(char* msg) {

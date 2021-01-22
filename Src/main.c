@@ -31,8 +31,11 @@ int main(void) {
   // xTaskCreate(vTask1_handler, "Task-1", configMINIMAL_STACK_SIZE, NULL, 2, &xTaskHandle1);
   // xTaskCreate(vTask2_handler, "Task-2", configMINIMAL_STACK_SIZE, NULL, 2, &xTaskHandle2);
 
-  xTaskCreate(vTask_handler_Led, "Led-Task", configMINIMAL_STACK_SIZE, NULL, 2, &xTaskHandleLed);
+  // xTaskCreate(vTask_handler_Led, "Led-Task", configMINIMAL_STACK_SIZE, NULL, 2, &xTaskHandleLed);
   // xTaskCreate(vTask_handler_Button, "Button-Task", configMINIMAL_STACK_SIZE, NULL, 2, &xTaskHandleButton);
+
+  xTaskCreate(vTask_Led_notify_handler, "Led-Notfied", 500, NULL, 2, &xTaskHandleLedNotify);
+  xTaskCreate(vTask_Button_notify_handler, "Button-Notify", 500, NULL, 2, &xTaskHandleButtonNotify);
 
   /* Start Schedular , No return from here*/
   vTaskStartScheduler();

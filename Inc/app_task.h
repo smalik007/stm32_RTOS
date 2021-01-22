@@ -21,6 +21,9 @@ TaskHandle_t xTaskHandle2;
 TaskHandle_t xTaskHandleLed;
 TaskHandle_t xTaskHandleButton;
 
+TaskHandle_t xTaskHandleLedNotify;
+TaskHandle_t xTaskHandleButtonNotify;
+
 /* Exported constants --------------------------------------------------------*/
 
 /* Global variables ----------------------------------------------------------*/
@@ -33,3 +36,6 @@ void vTask2_handler(void* param);
 void vTask_handler_Led(void* param);
 void vTask_handler_Button(void* param);
 void button_handler();
+
+void vTask_Led_notify_handler(void* param);
+void vTask_Button_notify_handler(void* param);
