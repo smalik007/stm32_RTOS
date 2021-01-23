@@ -15,6 +15,7 @@
 #define AVAILABLE TRUE
 #define NOT_AVAILABLE FALSE
 #define USE_SEGGER_SYSVIEW FALSE
+#define USE_BUTTON_AS_INT TRUE
 
 /* Global Variable ------------------------------------------------------------*/
 // extern uint32_t milliseconds;

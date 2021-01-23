@@ -13,46 +13,66 @@ uint8_t uart_accesskey = AVAILABLE;
 uint8_t button_status = BUTTON_RELEASED;
 uint8_t button_count = 0;
 
+uint8_t switch_priority = pdFALSE;
+
 void vTask1_handler(void* param) {
+  UBaseType_t p1, p2;
+  char* usr_msg = (char*)malloc(200);
+
+  sprintf(usr_msg, "Task1 Running :\r\n");
+  LOG_MSG(usr_msg);
+
+  sprintf(usr_msg, "Task1 Priority : %ld\r\n", uxTaskPriorityGet(xTaskHandle1));
+  LOG_MSG(usr_msg);
+
+  sprintf(usr_msg, "Task2 Priority : %ld\r\n", uxTaskPriorityGet(xTaskHandle2));
+  LOG_MSG(usr_msg);
+
   while (1) {
-#ifdef USE_SEMIHOSTING
-    printf("Hello From Task - 1\n");
-#endif
-    if (uart_accesskey == AVAILABLE) {
-      uart_accesskey = NOT_AVAILABLE;
-      LOG_MSG("Hello From Task-1\n");
-      uart_accesskey = AVAILABLE;
+    if (switch_priority == pdTRUE) {
+      switch_priority = pdFALSE;
 
-#if USE_SEGGER_SYSVIEW == TRUE
-      /* Prints for segger SYSview */
-      SEGGER_SYSVIEW_Print("task1 - yielding");
-      /* tells Segger that we are manually switching the context in case of co-operative scheduling */
-      traceISR_EXIT_TO_SCHEDULER();
-#endif
+      p1 = uxTaskPriorityGet(xTaskHandle1);
+      p2 = uxTaskPriorityGet(xTaskHandle2);
 
-      /* Manually trigger context swithing, leaving the CPU and allowing other task to use the uart_accesskey*/
-      taskYIELD();
+      vTaskPrioritySet(xTaskHandle1, p2);
+      vTaskPrioritySet(xTaskHandle2, p1);
+    } else {
+      LedToggle(LED_YELLOW);
+      rtos_delay(1000);
     }
   }
+  free(usr_msg);
 }
 
 void vTask2_handler(void* param) {
-  while (1) {
-#ifdef USE_SEMIHOSTING
-    printf("Hello From Task - 1\n");
-#endif
-    if (uart_accesskey == AVAILABLE) {
-      uart_accesskey = NOT_AVAILABLE;
-      LOG_MSG("Hello From Task-2\n");
-      uart_accesskey = AVAILABLE;
+  UBaseType_t p1, p2;
+  char* usr_msg = (char*)malloc(200);
 
-#if USE_SEGGER_SYSVIEW == TRUE
-      SEGGER_SYSVIEW_Print("task2 - yielding");
-      traceISR_EXIT_TO_SCHEDULER();
-#endif
-      taskYIELD();
+  sprintf(usr_msg, "Task2 Running :\r\n");
+  LOG_MSG(usr_msg);
+
+  sprintf(usr_msg, "Task1 Priority : %ld\r\n", uxTaskPriorityGet(xTaskHandle1));
+  LOG_MSG(usr_msg);
+
+  sprintf(usr_msg, "Task2 Priority : %ld\r\n", uxTaskPriorityGet(xTaskHandle2));
+  LOG_MSG(usr_msg);
+
+  while (1) {
+    if (switch_priority == pdTRUE) {
+      switch_priority = pdFALSE;
+
+      p1 = uxTaskPriorityGet(xTaskHandle1);
+      p2 = uxTaskPriorityGet(xTaskHandle2);
+
+      vTaskPrioritySet(xTaskHandle2, p1);
+      vTaskPrioritySet(xTaskHandle1, p2);
+    } else {
+      LedToggle(LED_YELLOW);
+      rtos_delay(200);
     }
   }
+  free(usr_msg);
 }
 
 void vTask_handler_Led(void* param) {
@@ -112,4 +132,18 @@ void vTask_Button_notify_handler(void* param) {
   free(usr_msg);
 }
 
-void button_handler() { button_count = (button_count + 1) % 3; }
+void button_handler() {
+  button_count = (button_count + 1) % 3;
+  switch_priority = pdTRUE;
+}
+
+void rtos_delay(TickType_t delay_ms) {
+  /* waste cpu cyles*/
+  TickType_t ticks_to_wait = pdMS_TO_TICKS(delay_ms);
+
+  TickType_t current_tick_count = xTaskGetTickCount();
+
+  while (xTaskGetTickCount() < (current_tick_count + ticks_to_wait)) {
+    ;
+  }
+}
