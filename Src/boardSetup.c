@@ -9,10 +9,6 @@
 
 #include <string.h>
 
-#include "FreeRTOSConfig.h"
-
-volatile timestamp_ms milliseconds = 0;
-
 /* Prototypes */
 static void setupUSART3();
 static void setupLeds();
@@ -209,12 +205,3 @@ void CPU_CACHE_Enable(void) {
   SCB_EnableDCache();
 }
 
-void vApplicationIdleHook(void) {
-  /* Send CPU to normal sleep mode untill interrupt (systick or any other) */
-  __WFI();
-}
-
-void vApplicationTickHook() {
-  /* Ideally should be milliseconds += (1 / configTICK_RATE_HZ) * 1000; */
-  milliseconds++;
-}
