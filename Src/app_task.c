@@ -76,24 +76,32 @@ void vTask2_handler(void* param) {
 }
 
 void vTask_handler_Led(void* param) {
+  char* usr_msg = (char*)malloc(200);
   while (1) {
     if (button_count == 0) {
       LedToggle(LED_RED);
-      vTaskDelay(200 / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(200));
+
       LedToggle(LED_RED);
-      vTaskDelay(200 / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(200));
+
+      sprintf(usr_msg, "Millis : %ld\r\n", milliseconds);
+      LOG_MSG(usr_msg);
     } else if (button_count == 1) {
       LedToggle(LED_YELLOW);
-      vTaskDelay(500 / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(200));
+
       LedToggle(LED_YELLOW);
-      vTaskDelay(500 / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(200));
     } else if (button_count == 2) {
       LedToggle(LED_GREEN);
-      vTaskDelay(1000 / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(200));
+
       LedToggle(LED_GREEN);
-      vTaskDelay(1000 / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(200));
     }
   }
+  free(usr_msg);
 }
 
 // void vTask_handler_Button(void* param) {

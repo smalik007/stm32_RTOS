@@ -9,7 +9,9 @@
 
 #include <string.h>
 
-uint32_t milliseconds = 0;
+#include "FreeRTOSConfig.h"
+
+volatile timestamp_ms milliseconds = 0;
 
 /* Prototypes */
 static void setupUSART3();
@@ -207,17 +209,12 @@ void CPU_CACHE_Enable(void) {
   SCB_EnableDCache();
 }
 
-/**
- * @brief This function is called to increment  a global variable "uwTick"
- *        used as application time base.
- * @note In the default implementation, this variable is incremented each 1ms
- *       in Systick ISR.
- * @note This function is declared as __weak to be overwritten in case of other
- *      implementations in user file.
- * @retval None
- */
-// void HAL_IncTick(void)
-// {
-//   uwTick += (uint32_t)uwTickFreq;
-//   milliseconds = uwTick;
-// }
+void vApplicationIdleHook(void) {
+  /* Send CPU to normal sleep mode untill interrupt (systick or any other) */
+  __WFI();
+}
+
+void vApplicationTickHook() {
+  /* Ideally should be milliseconds += (1 / configTICK_RATE_HZ) * 1000; */
+  milliseconds++;
+}
