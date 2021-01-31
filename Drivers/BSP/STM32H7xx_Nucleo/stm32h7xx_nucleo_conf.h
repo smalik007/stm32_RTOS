@@ -53,6 +53,8 @@
 
 /* IRQ priorities */
 #define BSP_BUTTON_USER_IT_PRIORITY         15U
+#define BSP_COM1_IT_PRIORITY                7U
+// #define HAL_UART_RegisterCallback           1U
 
 #define BUS_SPI1_BAUDRATE                   18000000
 /**

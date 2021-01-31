@@ -25,3 +25,7 @@ extern volatile timestamp_ms milliseconds;
 
 extern void LOG_MSG(char* msg);
 extern void button_handler();
+
+uint8_t usart3_buffer[50];
+uint8_t usart3_buffer_rIdx;
+uint8_t usart3_buffer_wIdx;

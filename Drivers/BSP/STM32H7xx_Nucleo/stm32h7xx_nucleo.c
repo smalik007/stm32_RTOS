@@ -100,6 +100,7 @@ static void BUTTON_USER_EXTI_Callback(void);
 #if (USE_BSP_COM_FEATURE > 0)
 static void COM1_MspInit(UART_HandleTypeDef *huart);
 static void COM1_MspDeInit(UART_HandleTypeDef *huart);
+static void COM1_Rx_Callback(void);
 #endif
 /**
   * @}
@@ -398,6 +399,15 @@ __weak void BSP_PB_Callback(Button_TypeDef Button)
      It is called into this driver when an event on Button is triggered. */
 }
 
+__weak void BSP_COM_Rx_Callback(COM_TypeDef COM)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(COM);
+
+  /* This function should be implemented by the user application.
+     It is called into this driver when an event on Button is triggered. */
+}
+
 #if (USE_BSP_COM_FEATURE > 0)
 /**
   * @brief  Configures COM port.
@@ -489,7 +499,6 @@ __weak HAL_StatusTypeDef MX_USART3_Init(UART_HandleTypeDef *huart, MX_UART_InitT
  huart->Init.StopBits     = (uint32_t)COM_Init->StopBits;
  huart->Init.HwFlowCtl    = (uint32_t)COM_Init->HwFlowCtl;
  huart->Init.OverSampling = UART_OVERSAMPLING_8;
-
  return HAL_UART_Init(huart);
 }
 
@@ -673,6 +682,17 @@ static void COM1_MspDeInit(UART_HandleTypeDef *huart)
   /* Disable USART clock */
   COM1_CLK_DISABLE();
 }
+
+void BSP_COM_IRQHandler(COM_TypeDef COM) {
+  HAL_UART_IRQHandler(&hcom_uart[COM]);
+}
+
+
+static void COM1_Rx_Callback(void)
+{
+  BSP_COM_Rx_Callback(COM1);
+}
+
 #endif /* USE_BSP_COM_FEATURE */
 /**
   * @}

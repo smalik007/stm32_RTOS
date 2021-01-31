@@ -160,7 +160,6 @@ typedef struct
   void (* pMspDeInitCb)(UART_HandleTypeDef *);
 }BSP_COM_Cb_t;
 #endif /* (USE_HAL_UART_REGISTER_CALLBACKS == 1) */
-
 #define MX_UART_InitTypeDef COM_InitTypeDef
 #endif
 
@@ -262,6 +261,8 @@ typedef struct
 #define COM1_RX_GPIO_CLK_DISABLE()    __HAL_RCC_GPIOD_CLK_DISABLE()  //D
 #define COM1_RX_AF                    GPIO_AF7_USART3
 #define COM_POLL_TIMEOUT             100
+#define COM1_IRQn                    USART3_IRQn
+
 #endif
 
 /**
@@ -306,6 +307,8 @@ int32_t  BSP_COM_Init(COM_TypeDef COM, COM_InitTypeDef *COM_Init);
 int32_t  BSP_COM_DeInit(COM_TypeDef COM);
 #if (USE_COM_LOG > 0)
 int32_t  BSP_COM_SelectLogPort (COM_TypeDef COM);
+void     BSP_COM_IRQHandler(COM_TypeDef COM);
+void     BSP_COM_Rx_Callback(COM_TypeDef COM);
 #endif
 
 #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)

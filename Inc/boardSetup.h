@@ -9,6 +9,10 @@
 #include "global_var.h"
 #include "stm32h7xx_hal.h"
 #include "stm32h7xx_nucleo.h"
+#include "stm32h7xx_hal_usart.h"
+
+
+// __IO ITStatus UartReady = RESET;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
