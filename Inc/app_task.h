@@ -10,8 +10,8 @@
 #include "FreeRTOS.h"
 #include "boardSetup.h"
 #include "global_var.h"
-#include "task.h"
 #include "queue.h"
+#include "task.h"
 #include "timers.h"
 /* Exported macro ------------------------------------------------------------*/
 
@@ -26,15 +26,13 @@ TaskHandle_t xTaskHandle4;
 QueueHandle_t commad_queue;
 QueueHandle_t uart_write_queue;
 
-
 /* Exported constants --------------------------------------------------------*/
 
 /* Global variables ----------------------------------------------------------*/
-typedef struct  AppCMD
-{
-    uint8_t cmd;
-    uint8_t cmd_arg[10];
-}App_cmd_t;
+typedef struct AppCMD {
+  uint8_t cmd;
+  uint8_t cmd_arg[10];
+} App_cmd_t;
 
 /* Exported functions ------------------------------------------------------- */
 /* Task prototype ----------------------------------------------------------- */
@@ -45,3 +43,14 @@ void vTask4_uart_write(void* param);
 
 void button_handler();
 
+typedef enum COMMAND_ENUM {
+  CMD_EXIT_APP = 0,
+  CMD_LED_ON = 1,
+  CMD_LED_OFF = 2,
+  CMD_LED_TOGGLE = 3,
+  CMD_LED_TOGGLE_OFF = 4,
+  CMD_LED_READ_STATUS = 5,
+  CMD_RTC_DATETIME = 6,
+  CMD_MAX_CMD = 7
+
+} COMMAND_ENUM_E;

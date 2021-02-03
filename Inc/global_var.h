@@ -19,6 +19,10 @@
 #define USE_SEGGER_SYSVIEW FALSE
 #define USE_BUTTON_AS_INT TRUE
 
+#define MAX_MSG_BUFF 50
+
+#define CIC_INC(x, buffSize) (x = x + 1 % buffSize)
+
 /* Global Variable ------------------------------------------------------------*/
 typedef uint32_t timestamp_ms;
 extern volatile timestamp_ms milliseconds;
@@ -26,6 +30,6 @@ extern volatile timestamp_ms milliseconds;
 extern void LOG_MSG(char* msg);
 extern void button_handler();
 
-uint8_t usart3_buffer[50];
-uint8_t usart3_buffer_rIdx;
-uint8_t usart3_buffer_wIdx;
+uint8_t usart_msg_buffer[MAX_MSG_BUFF];
+uint8_t buffer_rIdx;
+uint8_t buffer_wIdx;

@@ -6,9 +6,10 @@
  */
 
 #include "boardSetup.h"
-#include "app_task.h"
 
 #include <string.h>
+
+#include "app_task.h"
 
 /* Prototypes */
 static void setupUSART3();
@@ -107,26 +108,30 @@ void BSP_PB_Callback(Button_TypeDef Button) {
 
 /* Uart RxISR callback function */
 void BSP_COM_Rx_Callback(COM_TypeDef COM) {
-    
-    // if(__HAL_USART_GET_FLAG(&hcom_uart[COM], USART_FLAG_RXNE)){
-      uint8_t data_bytes = 0;
-      // HAL_USART_Receive(&hcom_uart[COM], (uint8_t* )&data_bytes, sizeof(data_bytes), COM_POLL_TIMEOUT);
-    //  HAL_UART_Receive(&hcom_uart[COM], (uint8_t* )&data_bytes, sizeof(data_bytes), 0);
-    	  // HAL_UART_Receive(&hcom_uart[COM], (uint8_t* )&data_bytes, sizeof(data_bytes), 0);
-       HAL_UART_Receive_IT(&hcom_uart[COM], (uint8_t* )&data_bytes, 1);
-       HAL_UART_IRQHandler(&hcom_uart[COM]);
+  BaseType_t xHigherPriorityTask = pdFALSE;
 
-        if(COM == COM1) {
-          usart3_buffer[usart3_buffer_wIdx++] = data_bytes;
-          if(data_bytes == '\r') {
-            /* User has finished entering data */
-            // Notify the cmd_handling task
-            xTaskNotifyFromISR(xTaskHandle2, 0, eNoAction, 0);
-          }
-        }
-      // __HAL_USART_ENABLE_IT(&hcom_uart[COM], USART_IT_RXNE);
-      // __HAL_USART_CLEAR_FLAG(&hcom_uart[COM], USART_CLEAR_TCF);
-    // }
+  if (__HAL_USART_GET_FLAG(&hcom_uart[COM], USART_FLAG_RXNE)) {
+    uint8_t data_bytes = 0;
+    // HAL_UART_Receive(&hcom_uart[COM], (uint8_t* )&data_bytes, sizeof(data_bytes), 0);
+    HAL_UART_Receive_IT(&hcom_uart[COM], (uint8_t*)&data_bytes, 1);
+    HAL_UART_IRQHandler(&hcom_uart[COM]);
+
+    if (COM == COM1) {
+      usart_msg_buffer[buffer_wIdx] = data_bytes;
+      CIC_INC(buffer_wIdx, MAX_MSG_BUFF);
+
+      /* User has finished entering data */
+      // Notify the cmd_handling task
+      xTaskNotifyFromISR(xTaskHandle2, 0, eNoAction, &xHigherPriorityTask);
+      xTaskNotifyFromISR(xTaskHandle1, 0, eNoAction, &xHigherPriorityTask);
+    }
+    __HAL_USART_ENABLE_IT(&hcom_uart[COM], USART_IT_RXNE);
+    // __HAL_USART_CLEAR_FLAG(&hcom_uart[COM], USART_CLEAR_TCF);
+  }
+
+  if (xHigherPriorityTask == pdTRUE) {
+    taskYIELD();
+  }
 }
 
 /**
@@ -232,36 +237,29 @@ void CPU_CACHE_Enable(void) {
 
 /* override function to enable RX interrupt etc, this is application specific confihuration
  the function will be called from the HAL Layer  */
-void HAL_UART_MspInit(UART_HandleTypeDef *huart) {
-  // __HAL_USART_ENABLE_IT(huart, USART_IT_RXNE);
+void HAL_UART_MspInit(UART_HandleTypeDef* huart) {
+  __HAL_USART_ENABLE_IT(huart, USART_IT_RXNE);
   HAL_NVIC_SetPriority(COM1_IRQn, BSP_COM1_IT_PRIORITY, 1);
   HAL_NVIC_EnableIRQ(COM1_IRQn);
 }
 
 void USART3_IRQHandler(void) {
-//  HAL_UART_Receive_IT(&hcom_uart[COM1], (uint8_t* )&usart3_buffer, sizeof(usart3_buffer));
-//  BSP_COM_IRQHandler(COM1);
-   BSP_COM_Rx_Callback(COM1);
-  //  HAL_USART_IRQHandler(COM1);
+  //  BSP_COM_IRQHandler(COM1);
+  BSP_COM_Rx_Callback(COM1);
 }
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
-{
-  /* Set transmission flag: transfer complete */
-//  UartReady = SET;
+// void HAL_UART_RxCpltCallback(UART_HandleTypeDef* UartHandle) {
+//   /* Set transmission flag: transfer complete */
+//   //  UartReady = SET;
 
-  uint8_t data_byte = 0;
-  uint8_t buffer_rdIdx_local = 0;
-  data_byte = usart3_buffer[buffer_rdIdx_local];
-  while (data_byte != NULL || buffer_rdIdx_local < sizeof(usart3_buffer))
-  {
-    if(data_byte == '\r') {
-      xTaskNotifyFromISR(xTaskHandle2, 0, eNoAction, 0);
-      break;
-    }
-  }
-  __HAL_USART_ENABLE_IT(UartHandle, USART_IT_RXNE);
-   
-}
-
-
+//   uint8_t data_byte = 0;
+//   uint8_t buffer_rdIdx_local = 0;
+//   data_byte = usart_msg_buffer[buffer_rdIdx_local];
+//   while (data_byte != NULL || buffer_rdIdx_local < sizeof(usart_msg_buffer)) {
+//     if (data_byte == '\r') {
+//       xTaskNotifyFromISR(xTaskHandle2, 0, eNoAction, 0);
+//       break;
+//     }
+//   }
+//   __HAL_USART_ENABLE_IT(UartHandle, USART_IT_RXNE);
+// }

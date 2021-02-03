@@ -10,7 +10,6 @@
 static void init_vars(void);
 
 int main(void) {
-
   init_vars();
   setupBoard();
 
@@ -35,14 +34,14 @@ int main(void) {
   commad_queue = xQueueCreate(10, sizeof(App_cmd_t*));
   uart_write_queue = xQueueCreate(10, sizeof(char*));
 
-  if(commad_queue != NULL) {
-  xTaskCreate(vTask1_menu_display, "Menu-Display", 500, NULL, 2, &xTaskHandle1);
-  xTaskCreate(vTask2_cmd_handling, "Menu-Display", 500, NULL, 2, &xTaskHandle2);
-  xTaskCreate(vTask3_cmd_processing, "Menu-Display", 500, NULL, 2, &xTaskHandle3);
-  xTaskCreate(vTask4_uart_write, "Menu-Display", 500, NULL, 2, &xTaskHandle4);
+  if (commad_queue != NULL) {
+    xTaskCreate(vTask1_menu_display, "Menu-Display", 500, NULL, 2, &xTaskHandle1);
+    xTaskCreate(vTask2_cmd_handling, "Menu-Display", 500, NULL, 2, &xTaskHandle2);
+    xTaskCreate(vTask3_cmd_processing, "Menu-Display", 500, NULL, 2, &xTaskHandle3);
+    xTaskCreate(vTask4_uart_write, "Menu-Display", 500, NULL, 2, &xTaskHandle4);
 
-  /* Start Schedular , No return from here*/
-  vTaskStartScheduler();
+    /* Start Schedular , No return from here*/
+    vTaskStartScheduler();
   } else {
     LOG_MSG("QUEUE creation failed");
   }
@@ -53,8 +52,7 @@ int main(void) {
   return 0;
 }
 
-
 void init_vars(void) {
-  usart3_buffer_rIdx = 0;
-  usart3_buffer_wIdx = 0;
+  buffer_rIdx = 0;
+  buffer_wIdx = 0;
 }

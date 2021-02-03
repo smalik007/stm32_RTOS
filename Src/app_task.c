@@ -26,6 +26,8 @@ char menu[] = {
 \r\nEXIT_APP          ----> 0 \
 \r\nType your option : "};
 
+static uint8_t getCommandCode(uint8_t* buffer);
+
 void vTask1_menu_display(void* param) {
   char* pData = menu;
   while (1) {
@@ -35,20 +37,46 @@ void vTask1_menu_display(void* param) {
   }
 }
 void vTask2_cmd_handling(void* param) {
-  char* usr_msg = (char*)malloc(200);
+  uint8_t command_code = 0;
+  App_cmd_t* new_cmd;
   while (1) {
-    if (pdTRUE == xTaskNotifyWait(0, 0, NULL, portMAX_DELAY)) {
-      /* Received the notification */
-      sprintf(usr_msg, "Rx data: \r\n");
-      LOG_MSG(usr_msg);
-      LedToggle(LED_GREEN);
-    }
+    xTaskNotifyWait(0, 0, NULL, portMAX_DELAY);
+    command_code = getCommandCode(usart_msg_buffer);
+    new_cmd = (App_cmd_t*)pvPortMalloc(sizeof(App_cmd_t));
+    new_cmd->cmd = command_code;
+    // getArguments(new_cmd->cmd_arg);
+
+    /* Send item to cmd queue */
+    xQueueSend(commad_queue, &new_cmd, portMAX_DELAY);
   }
 }
 
 void vTask3_cmd_processing(void* param) {
+  uint8_t command_code = 0;
+  App_cmd_t* new_cmd;
+  char task_msg[50];
   while (1) {
-    /* code */
+    xQueueReceive(commad_queue, (void*)&new_cmd, portMAX_DELAY);
+    switch (new_cmd->cmd) {
+      case CMD_LED_ON:
+        LedOn(LED_GREEN);
+        break;
+      case CMD_LED_OFF:
+        LedOff(LED_GREEN);
+        break;
+      case CMD_LED_TOGGLE:
+        LedToggle(LED_GREEN);
+        break;
+      case CMD_LED_TOGGLE_OFF:
+        LedOff(LED_GREEN);
+        break;
+      case CMD_LED_READ_STATUS:
+        break;
+      case CMD_RTC_DATETIME:
+        break;
+      default:
+        break;
+    }
   }
 }
 
@@ -74,4 +102,9 @@ void rtos_delay(TickType_t delay_ms) {
   while (xTaskGetTickCount() < (current_tick_count + ticks_to_wait)) {
     ;
   }
+}
+
+uint8_t getCommandCode(uint8_t* buffer) {
+  return buffer[buffer_rIdx] - 48;
+  CIC_INC(buffer_rIdx, MAX_MSG_BUFF);
 }
