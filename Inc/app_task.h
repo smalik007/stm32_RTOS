@@ -18,15 +18,15 @@
 
 /* Exported types ------------------------------------------------------------*/
 /* Task handler to use to blocking, deleting, yeilding etc */
-TaskHandle_t xManager;
-TaskHandle_t xEmployee;
+TaskHandle_t xPeriodic;
+TaskHandle_t xHandler;
 
 /* Queue Handles */
 /* QueueHanle_t is typedef of xQueueHandle only */
 QueueHandle_t xWorkQueue;
 
 /* Semaphore Handle */
-xSemaphoreHandle xWorkSem;
+xSemaphoreHandle xCountingSem;
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -38,8 +38,8 @@ typedef struct AppCMD {
 
 /* Exported functions ------------------------------------------------------- */
 /* Task prototype ----------------------------------------------------------- */
-void vManagerTask(void* param);
-void vEmployeeTask(void* param);
+void vPeriodic(void* param);
+void vHandler(void* param);
 
 void button_handler();
 

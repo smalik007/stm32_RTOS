@@ -31,17 +31,17 @@ int main(void) {
 #endif
 
   /* create queue  */
-  xWorkQueue = xQueueCreate(10, sizeof(unsigned int));
-  vSemaphoreCreateBinary(xWorkSem);
+  // xWorkQueue = xQueueCreate(10, sizeof(unsigned int));
+  xCountingSem =  xSemaphoreCreateCounting(10, 0);
 
-  if (xWorkQueue != NULL && xWorkSem != NULL) {
-    xTaskCreate(vManagerTask, "Task-Manager", 500, NULL, 3, &xManager);
-    xTaskCreate(vEmployeeTask, "Task-Employee", 500, NULL, 2, &xEmployee);
+  if (xCountingSem != NULL) {
+    xTaskCreate(vPeriodic, "Task-Periodic", 500, NULL, 3, &xPeriodic);
+    xTaskCreate(vHandler, "Task-Handler", 500, NULL, 2, &xHandler);
 
     /* Start Schedular , No return from here*/
     vTaskStartScheduler();
   } else {
-    // LOG_MSG("QUEUE/Semaphore creation failed");
+    LOG_MSG("QUEUE/Semaphore creation failed");
   }
 
   /* Control Never comes here */

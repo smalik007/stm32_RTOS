@@ -15,57 +15,50 @@ uint8_t button_count = 0;
 
 uint8_t switch_priority = pdFALSE;
 
-void vManagerTask(void* param) {
-  unsigned int xWorkTicketId;
-  portBASE_TYPE xStatus;
+
+void vPeriodic(void* param) {
   char msg[100];
 
-  /* Semaphore is created in the empty state, it must be first given before before it can be obtained */
-  xSemaphoreGive(xWorkSem);
-
   while (1) {
-    xWorkTicketId = (rand() & 0x1FF);
+   vTaskDelay(pdMS_TO_TICKS(500));
+   sprintf(msg, "\r\n Periodic Task - Pends Button ISR\r\n");
+   LOG_MSG(msg);
 
-    xStatus = xQueueSend(xWorkQueue, &xWorkTicketId, portMAX_DELAY);
-    if(xStatus != pdPASS) {
-      sprintf(msg, "\r\nCouldn't Send to the queue\r\n");
-      LOG_MSG(msg);
-    } else {
-      /* Manager task give the semaphore to be utilised by Employee task */
-      xSemaphoreGive(xWorkSem);
-      /* let the other task execute */
-      taskYIELD();
-    }
-  }
+   HAL_NVIC_SetPendingIRQ(EXTI15_10_IRQn);
+
+   sprintf(msg, "\r\n Periodic Task - Resumes and waits..\r\n");
+   LOG_MSG(msg);
+   }
 }
 
-void vEmployeeTask(void* param) {
-  unsigned int ticket_id;
-  portBASE_TYPE xStatus;
+void vHandler(void* param) {
   char msg[100];
   while (1) {
+    /* Decrements xCountingSem value */
+    xSemaphoreTake(xCountingSem, portMAX_DELAY);
 
-    /* Tries to take Semaphore non-block state */
-    xSemaphoreTake(xWorkSem, 0);
-
-    /* Read with non-blocking state */
-    xStatus = xQueueReceive(xWorkQueue, &ticket_id, 0);
-
-    if(xStatus == pdPASS) {
-      sprintf(msg, "Employee ID: %d\r\n", ticket_id);
-      LOG_MSG(msg);
-      vTaskDelay(ticket_id);
-    } else {
-      sprintf(msg, " Queue is Empty \r\n");
-      LOG_MSG(msg);
-    }
-
+    sprintf(msg, "\r\nHandler Processing...\r\n");
+    LOG_MSG(msg);
   }
 }
 
 void button_handler() {
   button_count = (button_count + 1) % 3;
   switch_priority = pdTRUE;
+  portBASE_TYPE xHigherPTaskWake = pdFALSE;
+
+  char msg[50];
+  sprintf(msg, "\r\n==>Button ISR\r\n");
+  LOG_MSG(msg);
+
+  /* Give semaphore multiple times to latch multiple interrupts */
+  xSemaphoreGiveFromISR(xCountingSem, &xHigherPTaskWake);
+  xSemaphoreGiveFromISR(xCountingSem, &xHigherPTaskWake);
+  xSemaphoreGiveFromISR(xCountingSem, &xHigherPTaskWake);
+  xSemaphoreGiveFromISR(xCountingSem, &xHigherPTaskWake);
+  xSemaphoreGiveFromISR(xCountingSem, &xHigherPTaskWake);
+
+  portEND_SWITCHING_ISR(xHigherPTaskWake);
 }
 
 void rtos_delay(TickType_t delay_ms) {

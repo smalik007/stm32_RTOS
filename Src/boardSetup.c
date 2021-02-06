@@ -96,7 +96,8 @@ void LOG_MSG(char* msg) {
  */
 void EXTI15_10_IRQHandler(void) {
   /* Following function clears IT pending bits and in returns call the below BSP_PB_Callback*/
-  BSP_PB_IRQHandler(BUTTON_USER);
+  // BSP_PB_IRQHandler(BUTTON_USER);
+  button_handler();
 }
 
 /* Interrupt callback function for user button */
