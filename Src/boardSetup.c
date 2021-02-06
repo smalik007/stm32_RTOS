@@ -122,8 +122,8 @@ void BSP_COM_Rx_Callback(COM_TypeDef COM) {
 
       /* User has finished entering data */
       // Notify the cmd_handling task
-      xTaskNotifyFromISR(xTaskHandle2, 0, eNoAction, &xHigherPriorityTask);
-      xTaskNotifyFromISR(xTaskHandle1, 0, eNoAction, &xHigherPriorityTask);
+      // xTaskNotifyFromISR(xTaskHandle2, 0, eNoAction, &xHigherPriorityTask);
+      // xTaskNotifyFromISR(xTaskHandle1, 0, eNoAction, &xHigherPriorityTask);
     }
     __HAL_USART_ENABLE_IT(&hcom_uart[COM], USART_IT_RXNE);
     // __HAL_USART_CLEAR_FLAG(&hcom_uart[COM], USART_CLEAR_TCF);

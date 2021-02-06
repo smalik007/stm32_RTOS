@@ -31,19 +31,17 @@ int main(void) {
 #endif
 
   /* create queue  */
-  commad_queue = xQueueCreate(10, sizeof(App_cmd_t*));
-  uart_write_queue = xQueueCreate(10, sizeof(char*));
+  xWorkQueue = xQueueCreate(10, sizeof(unsigned int));
+  vSemaphoreCreateBinary(xWorkSem);
 
-  if (commad_queue != NULL) {
-    xTaskCreate(vTask1_menu_display, "Menu-Display", 500, NULL, 1, &xTaskHandle1);
-    xTaskCreate(vTask2_cmd_handling, "Menu-Display", 500, NULL, 2, &xTaskHandle2);
-    xTaskCreate(vTask3_cmd_processing, "Menu-Display", 500, NULL, 2, &xTaskHandle3);
-    xTaskCreate(vTask4_uart_write, "Menu-Display", 500, NULL, 2, &xTaskHandle4);
+  if (xWorkQueue != NULL && xWorkSem != NULL) {
+    xTaskCreate(vManagerTask, "Task-Manager", 500, NULL, 3, &xManager);
+    xTaskCreate(vEmployeeTask, "Task-Employee", 500, NULL, 2, &xEmployee);
 
     /* Start Schedular , No return from here*/
     vTaskStartScheduler();
   } else {
-    LOG_MSG("QUEUE creation failed");
+    // LOG_MSG("QUEUE/Semaphore creation failed");
   }
 
   /* Control Never comes here */

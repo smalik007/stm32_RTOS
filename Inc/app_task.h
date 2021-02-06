@@ -11,20 +11,22 @@
 #include "boardSetup.h"
 #include "global_var.h"
 #include "queue.h"
+#include "semphr.h"
 #include "task.h"
 #include "timers.h"
 /* Exported macro ------------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
 /* Task handler to use to blocking, deleting, yeilding etc */
-TaskHandle_t xTaskHandle1;
-TaskHandle_t xTaskHandle2;
-TaskHandle_t xTaskHandle3;
-TaskHandle_t xTaskHandle4;
+TaskHandle_t xManager;
+TaskHandle_t xEmployee;
 
 /* Queue Handles */
-QueueHandle_t commad_queue;
-QueueHandle_t uart_write_queue;
+/* QueueHanle_t is typedef of xQueueHandle only */
+QueueHandle_t xWorkQueue;
+
+/* Semaphore Handle */
+xSemaphoreHandle xWorkSem;
 
 /* Exported constants --------------------------------------------------------*/
 
@@ -36,10 +38,8 @@ typedef struct AppCMD {
 
 /* Exported functions ------------------------------------------------------- */
 /* Task prototype ----------------------------------------------------------- */
-void vTask1_menu_display(void* param);
-void vTask2_cmd_handling(void* param);
-void vTask3_cmd_processing(void* param);
-void vTask4_uart_write(void* param);
+void vManagerTask(void* param);
+void vEmployeeTask(void* param);
 
 void button_handler();
 

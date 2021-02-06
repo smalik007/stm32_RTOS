@@ -70,6 +70,7 @@
 #define configUSE_APPLICATION_TASK_TAG          0
 #define configUSE_COUNTING_SEMAPHORES           1
 #define configGENERATE_RUN_TIME_STATS           0
+// #define configSUPPORT_DYNAMIC_ALLOCATION		0
 
 #define configSUPPORT_STATIC_ALLOCATION         0
 /* Co-routine definitions. */
