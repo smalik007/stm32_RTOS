@@ -112,9 +112,9 @@ void BSP_COM_Rx_Callback(COM_TypeDef COM) {
 
   if (__HAL_USART_GET_FLAG(&hcom_uart[COM], USART_FLAG_RXNE)) {
     uint8_t data_bytes = 0;
-    // HAL_UART_Receive(&hcom_uart[COM], (uint8_t* )&data_bytes, sizeof(data_bytes), 0);
-    HAL_UART_Receive_IT(&hcom_uart[COM], (uint8_t*)&data_bytes, 1);
-    HAL_UART_IRQHandler(&hcom_uart[COM]);
+    HAL_UART_Receive(&hcom_uart[COM], (uint8_t*)&data_bytes, sizeof(data_bytes), 0);
+    // HAL_UART_Receive_IT(&hcom_uart[COM], (uint8_t*)&data_bytes, 1);
+    // HAL_UART_IRQHandler(&hcom_uart[COM]);
 
     if (COM == COM1) {
       usart_msg_buffer[buffer_wIdx] = data_bytes;

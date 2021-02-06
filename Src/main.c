@@ -35,7 +35,7 @@ int main(void) {
   uart_write_queue = xQueueCreate(10, sizeof(char*));
 
   if (commad_queue != NULL) {
-    xTaskCreate(vTask1_menu_display, "Menu-Display", 500, NULL, 2, &xTaskHandle1);
+    xTaskCreate(vTask1_menu_display, "Menu-Display", 500, NULL, 1, &xTaskHandle1);
     xTaskCreate(vTask2_cmd_handling, "Menu-Display", 500, NULL, 2, &xTaskHandle2);
     xTaskCreate(vTask3_cmd_processing, "Menu-Display", 500, NULL, 2, &xTaskHandle3);
     xTaskCreate(vTask4_uart_write, "Menu-Display", 500, NULL, 2, &xTaskHandle4);
